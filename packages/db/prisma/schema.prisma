@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String        @id @default(uuid())
+  firstName         String
+  lastName          String
+  pseudo            String        @unique
+  email             String        @unique
+  // phone     String?
+  password          String
+  enabled           Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  reservations      Reservation[]
+  hostedActivities  Activity[]    @relation("hostedActivities")
+  enterprise        Entreprise?   @relation(fields: [entrepriseId], references: [id])
+  activityCreatedBy Activity[]    @relation("createdByActivities")
+  entrepriseId      String?
+  role              Role          @relation(fields: [roleId], references: [id])
+  roleId            String
+}
+
+model Role {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String
+  permissions RolePermission[]
+  users       User[]
+}
+
+model RolePermission {
+  id          String @id @default(uuid())
+  roleId      String
+  description String
+  role        Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model OnBoardingQuestion {
+  id                 String                        @id @default(uuid())
+  question           String
+  type               QUESTIONAIRE_TYPE
+  categoryId         String
+  answerPropositions OnBoardingAnswerProposition[]
+  category           OnBoardingCategory            @relation(fields: [categoryId], references: [id])
+  createdAt          DateTime                      @default(now())
+}
+
+model OnBoardingCategory {
+  id        String               @id @default(uuid())
+  label     String
+  value     String               @unique
+  questions OnBoardingQuestion[]
+  createdAt DateTime             @default(now())
+}
+
+model OnBoardingAnswerProposition {
+  id         String             @id @default(uuid())
+  answer     String
+  order      Int
+  rank       Int?
+  questionId String
+  question   OnBoardingQuestion @relation(fields: [questionId], references: [id])
+  createdAt  DateTime           @default(now())
+}
+
+model Activity {
+  id            String        @id @default(uuid())
+  title         String
+  description   String
+  date          DateTime
+  location      String
+  mapLink       String
+  privateAdress Boolean
+  minCapacity   Int           @default(0)
+  maxCapacity   Int           @default(0)
+  price         Float
+  hostId        String
+  createdBy     User          @relation("createdByActivities", fields: [createdById], references: [id])
+  createdById   String
+  theme         String
+  reservations  Reservation[]
+  imageUrl     String
+  status       ACTIVITY_STATUS @default(DRAFT)
+  host         User            @relation("hostedActivities", fields: [hostId], references: [id])
+  EntrepriseId String?
+  entreprise   Entreprise?     @relation(fields: [EntrepriseId], references: [id])
+  createdAt    DateTime        @default(now())
+}
+
+// model ActivityTheme {
+//   id          String     @id @default(uuid())
+//   name        String     @unique
+//   description String
+//   activities  Activity[]
+//   createdAt   DateTime   @default(now())
+// }
+
+model Entreprise {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  imageUrl    String
+  enabeled    Boolean    @default(true)
+  activities  Activity[]
+  employees   User[]
+  createdAt   DateTime   @default(now())
+}
+
+model Reservation {
+  id                String             @id @default(uuid())
+  activityId        String
+  userId            String
+  activity          Activity           @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservationStatus RESERVATION_STATUS @default(PENDING)
+  paymentIntentId   String?            @unique
+  createdAt         DateTime           @default(now())
+}
+
+enum QUESTIONAIRE_TYPE {
+  UNIQUE
+  MULTIPLE
+}
+
+enum ACTIVITY_STATUS {
+  DRAFT
+  PUBLISHED
+  FULL
+  COMPLETED
+  CANCELLED
+}
+
+enum RESERVATION_STATUS {
+  CANCELED
+  PAID
+  PENDING
+  NO_SHOW
+}

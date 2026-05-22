@@ -1,0 +1,57 @@
+services:
+    frontend:
+        build: ./apps/web
+        container_name: climb-bro_frontend
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            API_URL: ${API_URL}
+
+        ports:
+            - "3000:3000"
+
+    backend:
+        build: ./apps/api
+        container_name: climb-bro_backend
+        restart: unless-stopped
+        ports:
+            - "4000:4000"
+        env_file:
+            - .env
+        environment:
+            DATABASE_URL: ${DATABASE_URL}
+    caddy:
+        image: caddy:2-alpine
+        container_name: climb-bro_caddy
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+
+    postgres:
+        image: postgres:16-alpine
+        container_name: climb-bro_postgres
+        restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+
+        ports:
+            - "5434:5432"
+
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+volumes:
+    postgres_data:

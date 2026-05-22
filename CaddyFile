@@ -1,0 +1,7 @@
+climb-bro.fr {
+    reverse_proxy frontend:3000
+}
+
+api.climb-bro.fr {
+    reverse_proxy backend:4000
+}
