@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import PwaRegistration from "@/lib/register-pwa";
+import StyledComponentsRegistry from "@/lib/registery";
+import TabBar from "@/layouts/tab-bar";
+import GlobalStyle from "./global-style";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -58,9 +61,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <body>
-                <PwaRegistration />
-                {children}
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <StyledComponentsRegistry>
+                    <GlobalStyle />
+                    <PwaRegistration />
+                    {children}
+                    <TabBar />
+                </StyledComponentsRegistry>
             </body>
         </html>
     );
