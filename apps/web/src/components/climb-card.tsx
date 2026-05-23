@@ -140,5 +140,6 @@ const UserCard = styled.div`
         width: 100%;
         height: 100%;
         border-radius: 9999px;
+        object-fit: cover;
     }
 `;

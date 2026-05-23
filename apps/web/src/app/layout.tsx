@@ -4,6 +4,7 @@ import PwaRegistration from "@/lib/register-pwa";
 import StyledComponentsRegistry from "@/lib/registery";
 import TabBar from "@/layouts/tab-bar";
 import GlobalStyle from "./global-style";
+import Header from "@/layouts/header";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -65,6 +66,7 @@ export default function RootLayout({
                 <StyledComponentsRegistry>
                     <GlobalStyle />
                     <PwaRegistration />
+                    <Header />
                     {children}
                     <TabBar />
                 </StyledComponentsRegistry>
