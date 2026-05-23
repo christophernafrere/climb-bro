@@ -2,11 +2,13 @@
 
 import ClimbCard from "@/components/climb-card";
 import colors from "@/lib/colors";
-import { Info, TrophyIcon } from "lucide-react";
+import { TrophyIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styled from "styled-components";
 
 export default function Home() {
+    const router = useRouter();
     const filters = [
         { name: "tous" },
         { name: "voie" },
@@ -183,7 +185,9 @@ export default function Home() {
                 ))}
             </ClimbContainer>
 
-            <AddButton> + </AddButton>
+            <AddButton onClick={() => router.push("/climb-session/create")}>
+                +
+            </AddButton>
         </main>
     );
 }
@@ -203,9 +207,12 @@ const Filters = styled.div`
 const FilterButton = styled.button<{ $selected?: boolean }>`
     padding: 4px 12px;
     border-radius: 9999px;
-    background-color: ${(props) => (props.$selected ? "#2BBBA7" : "#F8F9FA")};
-    color: ${(props) => (props.$selected ? "#FFFFFF" : "#0f172a")};
-    border: ${(props) => (props.$selected ? "none" : "1px solid #BBCAC5")};
+    background-color: ${(props) =>
+        props.$selected ? colors.main.accent : colors.surface.cream};
+    color: ${(props) =>
+        props.$selected ? colors.surface.light : colors.text.default};
+    border: ${(props) =>
+        props.$selected ? "none" : `1px solid ${colors.border.default}`};
     cursor: pointer;
 `;
 
@@ -234,14 +241,14 @@ const InfoCard = styled.div`
     border-radius: 8px;
     p {
         font-size: 14px;
-        color: #ffffff81;
+        color: ${colors.text.subtle};
     }
 
     &:nth-child(2) {
-        background-color: #e1e3e4;
-        color: black;
+        background-color: ${colors.surface.soft};
+        color: ${colors.text.default};
         p {
-            color: black;
+            color: ${colors.text.default};
         }
     }
 `;
