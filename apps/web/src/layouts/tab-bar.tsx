@@ -54,7 +54,7 @@ const Container = styled.section<{ $selected?: boolean }>`
     left: 0;
     right: 0;
     background-color: ${colors.surface.light};
-    box-shadow: 0 -4px 8px #30bba714;
+    box-shadow: 0 -4px 8px ${colors.main.accent}14;
 `;
 
 const Tab = styled(Link)<{ $selected?: boolean }>`
@@ -73,7 +73,7 @@ const Tab = styled(Link)<{ $selected?: boolean }>`
     ${({ $selected }) =>
         $selected &&
         `
-        background-color: #B86DFD;
-        color: #410070;
+        background-color: ${colors.main.purple};
+        color: ${colors.main.purpleDark};
     `}
 `;

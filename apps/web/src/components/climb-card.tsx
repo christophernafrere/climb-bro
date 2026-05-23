@@ -87,9 +87,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 16px;
-    background-color: #fff;
+    background-color: ${colors.surface.light};
     border-radius: 8px;
-    box-shadow: 0 -4px 8px #30bba714;
+    box-shadow: 0 -4px 8px ${colors.main.accent}14;
 `;
 
 const TopContainer = styled.div`
@@ -111,7 +111,7 @@ const TypeTag = styled.span`
 `;
 
 const DateInfo = styled.span`
-    color: #6b7280;
+    color: ${colors.text.muted};
 `;
 
 const BottomContainer = styled.div`
@@ -131,8 +131,8 @@ const UserCard = styled.div`
     justify-content: center;
     width: 32px;
     height: 32px;
-    background-color: red;
-    border: 2px solid white;
+    background-color: ${colors.main.accent};
+    border: 2px solid ${colors.surface.light};
     border-radius: 9999px;
     margin-left: -8px;
 
