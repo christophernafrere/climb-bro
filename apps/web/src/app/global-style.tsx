@@ -9,6 +9,9 @@ const GlobalStyle = createGlobalStyle`
         font-family: var(--font-geist-sans), sans-serif;
         background-color: ${colors.surface.cream}
     }
+    main {
+        padding: 20px
+    }
 `;
 
 export default GlobalStyle;
