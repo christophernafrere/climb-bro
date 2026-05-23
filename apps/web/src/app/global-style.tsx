@@ -1,4 +1,5 @@
 "use client";
+import colors from "@/lib/colors";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -6,8 +7,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         font-family: var(--font-geist-sans), sans-serif;
-        background-color: #f5f5f5;
-        color: #333;
+        background-color: ${colors.surface.cream}
     }
 `;
 
