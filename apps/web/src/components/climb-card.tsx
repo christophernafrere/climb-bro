@@ -77,7 +77,7 @@ export default function ClimbCard({
                     ))}
                 </UsersList>
 
-                <Button>Rejoindre</Button>
+                <Button color="secondary">Rejoindre</Button>
             </BottomContainer>
         </Container>
     );
