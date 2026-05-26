@@ -210,7 +210,9 @@ export default function CreateClimbSession() {
                         </NumberInputContainer>
                     </label>
                 </FormSection>
-                <SubmitButton type="submit">Publier la séance</SubmitButton>
+                <SubmitButton color="primary" type="submit">
+                    Publier la séance
+                </SubmitButton>
             </Form>
         </main>
     );

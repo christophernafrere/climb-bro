@@ -2,10 +2,17 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, CalendarIcon, User2Icon, Users2Icon } from "lucide-react";
+import {
+    HomeIcon,
+    CalendarIcon,
+    User2Icon,
+    Users2Icon,
+    QrCodeIcon,
+} from "lucide-react";
 import colors from "@/lib/colors";
 export default function TabBar() {
     const pathname = usePathname();
+    const showMainTab = pathname !== "/partner/me";
     const tabs = [
         {
             name: "Flux",
@@ -16,6 +23,12 @@ export default function TabBar() {
             name: "Calendrier",
             href: "/calendar",
             icon: CalendarIcon,
+        },
+        {
+            name: "",
+            href: "/partner/me",
+            icon: QrCodeIcon,
+            main: true,
         },
         {
             name: "partenaires",
@@ -30,15 +43,18 @@ export default function TabBar() {
     ];
     return (
         <Container>
-            {tabs.map((tab) => (
-                <Tab
-                    key={tab.name}
-                    href={tab.href}
-                    $selected={pathname === tab.href}>
-                    <tab.icon size={24} />
-                    {tab.name}
-                </Tab>
-            ))}
+            {tabs
+                .filter((tab) => showMainTab || !tab.main)
+                .map((tab) => (
+                    <Tab
+                        key={tab.name || tab.href}
+                        href={tab.href}
+                        $main={tab.main}
+                        $selected={pathname === tab.href}>
+                        <tab.icon size={tab.main ? 46 : 24} />
+                        {tab.name}
+                    </Tab>
+                ))}
         </Container>
     );
 }
@@ -46,8 +62,8 @@ export default function TabBar() {
 const Container = styled.section<{ $selected?: boolean }>`
     position: fixed;
 
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     align-items: center;
     padding: 8px;
     bottom: 0;
@@ -57,7 +73,7 @@ const Container = styled.section<{ $selected?: boolean }>`
     box-shadow: 0 -4px 8px ${colors.main.accent}14;
 `;
 
-const Tab = styled(Link)<{ $selected?: boolean }>`
+const Tab = styled(Link)<{ $selected?: boolean; $main?: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,7 +89,24 @@ const Tab = styled(Link)<{ $selected?: boolean }>`
     ${({ $selected }) =>
         $selected &&
         `
-        background-color: ${colors.main.purple};
-        color: ${colors.main.purpleDark};
+        background-color: ${colors.main.primary};
+        color: ${colors.surface.light};
+    `}
+
+    ${({ $main }) =>
+        $main &&
+        `
+        position: absolute;
+        top: -24px;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 2px solid ${colors.border.default};
+        width: 56px;
+        height: 56px;
+        border-radius: 9999px;
+        background-color: ${colors.main.primary};
+        color: ${colors.surface.light};
+        margin-top: -24px;
+        box-shadow: 0 4px 8px ${colors.main.accent}1a;
     `}
 `;
