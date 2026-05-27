@@ -90,7 +90,7 @@ const SearchBar = styled.div`
     border-radius: 8px;
     margin-top: 16px;
     background-color: ${colors.surface.light};
-    border: 1px solid #bbcac5;
+    border: 1px solid ${colors.border.default};
 
     input {
         flex: 1;
@@ -106,7 +106,7 @@ const ActiveFriendSection = styled.section`
     background-color: ${colors.surface.light};
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #eeeeee;
+    border: 1px solid ${colors.border.light};
 
     h3 {
         display: flex;
@@ -131,8 +131,8 @@ const AddFriendSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border: 1px solid #b86dfd33;
-    background-color: rgba(184, 109, 253, 0.1);
+    border: 1px solid ${colors.border.accent};
+    background-color: ${colors.main.secondarySoft};
     border-radius: 16px;
 `;
 
@@ -145,8 +145,8 @@ const AddButton = styled.button`
     display: flex;
     width: 100%;
     justify-content: center;
-    background-color: white;
-    border: 1px solid ${colors.main.secondary};
+    background-color: ${colors.surface.white};
+    border: 1px solid ${colors.border.secondary};
     align-items: center;
     gap: 8px;
     padding: 12px 16px;

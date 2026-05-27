@@ -71,7 +71,7 @@ const FriendItem = styled.div`
     padding: 12px;
     border-radius: 8px;
     background-color: ${colors.surface.light};
-    border: 1px solid #eeeeee;
+    border: 1px solid ${colors.border.light};
     button {
         width: 100%;
         border-radius: 8px;
@@ -124,7 +124,7 @@ const Tag = styled.span`
 const SeparatorHorizontal = styled.div`
     height: 1px;
     margin: 16px 0;
-    border-top: 1px solid black;
+    border-top: 1px solid ${colors.border.default};
 `;
 
 const SeanceSection = styled.div`
@@ -154,7 +154,7 @@ const SeanceItem = styled.div`
     padding: 12px;
     border-radius: 8px;
     background-color: ${colors.surface.cream};
-    box-shadow: 0 2px 4px #2bbba850;
+    border: 1px solid ${colors.border.primary};
 `;
 
 const DataSection = styled.div`
@@ -165,11 +165,11 @@ const DataSection = styled.div`
     h4 {
         font-size: 18px;
         font-weight: 500;
-        color: black;
+        color: ${colors.text.strong};
     }
     p {
         font-size: 14px;
-        color: black;
+        color: ${colors.text.muted};
         font-weight: 400;
     }
 `;

@@ -47,7 +47,7 @@ const AvatarContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #eee;
+    background-color: ${colors.surface.paper};
 
     &::before {
         content: "";
@@ -56,7 +56,7 @@ const AvatarContainer = styled.div`
         right: 0;
         width: 12px;
         height: 12px;
-        border: 2px solid white;
+        border: 2px solid ${colors.surface.white};
         border-radius: 50%;
         background-color: ${colors.main.primary};
     }
@@ -73,7 +73,7 @@ const Initials = styled.span`
     position: absolute;
     font-size: 1rem;
     font-weight: bold;
-    color: #555;
+    color: ${colors.text.muted};
 `;
 
 const InfoPart = styled.div`
@@ -85,7 +85,7 @@ const InfoPart = styled.div`
 const FriendName = styled.span`
     font-size: 1rem;
     font-weight: 500;
-    color: #333;
+    color: ${colors.text.strong};
     margin-bottom: 4px;
 `;
 

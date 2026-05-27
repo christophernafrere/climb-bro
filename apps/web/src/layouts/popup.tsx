@@ -60,7 +60,7 @@ const Container = styled.div`
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    background: black;
+    background: ${colors.surface.ink};
 `;
 
 const CameraContainer = styled.div`
@@ -77,7 +77,7 @@ const CameraContainer = styled.div`
 const Overlay = styled.div`
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(11, 17, 32, 0.45);
 `;
 
 const scanAnimation = keyframes`
@@ -118,7 +118,7 @@ const CornerBase = styled.div`
     width: 42px;
     height: 42px;
 
-    border-color: #67ffe5;
+    border-color: ${colors.main.accent};
     border-style: solid;
 `;
 
@@ -198,7 +198,11 @@ const QRCodeButton = styled.button`
 
     color: white;
 
-    background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    background: linear-gradient(
+        135deg,
+        ${colors.main.secondary},
+        ${colors.main.purple}
+    );
 
     cursor: pointer;
 
@@ -208,7 +212,7 @@ const QRCodeButton = styled.button`
 const HelpText = styled.p`
     margin: 0;
 
-    color: white;
+    color: ${colors.surface.white};
 
     font-size: 14px;
     opacity: 0.85;

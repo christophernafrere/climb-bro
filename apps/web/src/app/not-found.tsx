@@ -63,8 +63,8 @@ const HelperSection = styled.div`
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 2rem;
-        border: 1px solid #bbcac5;
-        background-color: #f3f4f5;
+        border: 1px solid ${colors.border.default};
+        background-color: ${colors.surface.mist};
         border-radius: 0.5rem;
     }
 `;
@@ -97,5 +97,5 @@ const Text404 = styled.p`
     z-index: 1;
     font-size: 5rem;
     font-weight: 500;
-    color: ${colors.surface.soft};
+    color: ${colors.surface.cloud};
 `;
