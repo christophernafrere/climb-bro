@@ -28,6 +28,7 @@ export default function Header() {
 
 const Container = styled.header`
     position: sticky;
+    z-index: 100;
     top: 0;
     left: 0;
     right: 0;
