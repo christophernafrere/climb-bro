@@ -3,6 +3,7 @@ import { Button } from "@/layouts/button";
 import colors from "@/lib/colors";
 import { CalendarDaysIcon, CalendarIcon } from "lucide-react";
 import styled from "styled-components";
+import FriendSessionItem from "./friend-session-item";
 
 export default function FriendCard({
     name,
@@ -37,19 +38,11 @@ export default function FriendCard({
             <SeparatorHorizontal />
 
             <SeanceSection>
-                <p>Prochaine séances</p>
+                <h4>Prochaine séances</h4>
 
                 <SeanceList>
-                    <SeanceItem>
-                        <CalendarDaysIcon size={32} />
-
-                        <DataSection>
-                            <h4>Jeudi 14 Oct.</h4>
-                            <p>18:00 - 20:00</p>
-                        </DataSection>
-
-                        <JoinButton>Rejoindre</JoinButton>
-                    </SeanceItem>
+                    <FriendSessionItem />
+                    <FriendSessionItem />
                 </SeanceList>
             </SeanceSection>
         </FriendItem>
@@ -78,8 +71,8 @@ const FriendItem = styled.div`
     }
 
     h5 {
-        font-size: 1rem;
-        font-weight: 800;
+        font-size: 1.2rem;
+        font-weight: 700;
     }
 `;
 
@@ -122,9 +115,9 @@ const Tag = styled.span`
 `;
 
 const SeparatorHorizontal = styled.div`
-    height: 1px;
-    margin: 16px 0;
-    border-top: 1px solid ${colors.border.default};
+    width: 100%;
+    height: 3px;
+    border-top: 1px solid ${colors.border.light};
 `;
 
 const SeanceSection = styled.div`
@@ -145,43 +138,4 @@ const SeanceList = styled.div`
     width: 100%;
     color: ${colors.main.primary};
     font-size: 0.875rem;
-`;
-
-const SeanceItem = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: ${colors.surface.cream};
-    border: 1px solid ${colors.border.primary};
-`;
-
-const DataSection = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-    width: 100%;
-    h4 {
-        font-size: 18px;
-        font-weight: 500;
-        color: ${colors.text.strong};
-    }
-    p {
-        font-size: 14px;
-        color: ${colors.text.muted};
-        font-weight: 400;
-    }
-`;
-
-const JoinButton = styled.button`
-    width: max-content !important;
-    background-color: transparent;
-    color: ${colors.main.secondary};
-    border: none;
-    padding: 0;
-    font-weight: 600;
-
-    font-size: 0.875rem;
-    border-radius: 8px;
 `;

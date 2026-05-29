@@ -5,8 +5,12 @@ import colors from "@/lib/colors";
 import AvailableFriendCard from "@/components/available-friend-card";
 import { useRouter } from "next/navigation";
 import FriendCard from "@/components/friend-card";
+import Popup from "@/layouts/popup";
+import { useState } from "react";
+
 export default function PartnerPage() {
     const router = useRouter();
+
     return (
         <Main>
             <h2>Tes partenaires</h2>

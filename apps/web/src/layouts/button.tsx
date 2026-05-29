@@ -2,7 +2,7 @@
 import colors from "@/lib/colors";
 import styled from "styled-components";
 
-export const Button = styled.button<{ color: "primary" | "secondary" }>`
+export const Button = styled.button<{ color?: "primary" | "secondary" }>`
     display: flex;
     align-items: center;
     gap: 8px;
