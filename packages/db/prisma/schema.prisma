@@ -15,8 +15,20 @@ model User {
   password             String
   preferedClimbingType ClimbingType
   climbingLevel        ClimbingLevel
-  isEnabled            Boolean       @default(false)
   createdAt            DateTime      @default(now())
+  initiedPartnerships  ClimberPartenarship[] @relation("InitiatedPartenarship")
+  receivedPartnerships ClimberPartenarship[] @relation("ReceivedPartenarship")
+  isEnabled            Boolean       @default(false)
+}
+
+model ClimberPartenarship {
+  id         String   @id @default(uuid())
+  initiatorId String
+  receptorId String
+  isAccepted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  initiator User @relation("InitiatedPartenarship", fields: [initiatorId], references: [id])
+  receiver User @relation("ReceivedPartenarship", fields: [receptorId], references: [id])
 }
 
 enum ClimbingType {
