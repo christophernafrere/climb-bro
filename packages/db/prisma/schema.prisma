@@ -15,10 +15,11 @@ model User {
   password             String
   preferedClimbingType ClimbingType
   climbingLevel        ClimbingLevel
-  createdAt            DateTime      @default(now())
   initiedPartnerships  ClimberPartenarship[] @relation("InitiatedPartenarship")
   receivedPartnerships ClimberPartenarship[] @relation("ReceivedPartenarship")
   isEnabled            Boolean       @default(false)
+  createdAt            DateTime      @default(now())
+  refreshToken         String?
 }
 
 model ClimberPartenarship {
