@@ -69,8 +69,19 @@ export class AuthService {
 
             const payload = { userId: user.id, email: user.email };
 
+            const access_token = this.jwtService.sign(payload, {
+                expiresIn: "15m",
+            });
+
+            const refresh_token = this.jwtService.sign(payload, {
+                expiresIn: "30d",
+            });
+
+            await this.userService.updateRefreshToken(user.id, refresh_token);
+
             return {
-                access_token: await this.jwtService.sign(payload),
+                access_token,
+                refresh_token,
             };
         } catch (error) {
             throw new Error(
@@ -78,5 +89,35 @@ export class AuthService {
                     (error instanceof Error ? error.message : String(error)),
             );
         }
+    }
+
+    async refresh(userId: string, refresh_token: string) {
+        const payload = this.jwtService.verify(refresh_token);
+
+        const user = await this.userService.getUserById(userId);
+        if (!user || !user.refreshToken) {
+            throw new Error("Invalid refresh token");
+        }
+
+        const match = await bcrypt.compare(refresh_token, user.refreshToken);
+        if (!match) {
+            throw new Error("Invalid refresh token");
+        }
+
+        const access_token = this.jwtService.sign(payload, {
+            expiresIn: "15m",
+        });
+
+        const new_refresh_token = this.jwtService.sign(payload, {
+            expiresIn: "30d",
+        });
+
+        await this.userService.updateRefreshToken(userId, new_refresh_token);
+
+        return { access_token, refresh_token: new_refresh_token };
+    }
+
+    async logout(userId: string) {
+        await this.userService.updateRefreshToken(userId, null);
     }
 }

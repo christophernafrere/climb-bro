@@ -1,5 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { prisma, ClimbingType, ClimbingLevel } from "db";
+import * as bcrypt from "bcryptjs";
+
 @Injectable()
 export class UserService {
     async createUser(
@@ -54,6 +56,23 @@ export class UserService {
                 password: newPassword,
             },
         });
+        return updatedUser;
+    }
+
+    async updateRefreshToken(userId: string, refreshToken: string | null) {
+        const hashedRefreshToken = refreshToken
+            ? await bcrypt.hash(refreshToken, 10)
+            : null;
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                refreshToken: hashedRefreshToken,
+            },
+        });
+
         return updatedUser;
     }
 }
