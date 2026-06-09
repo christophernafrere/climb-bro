@@ -1,5 +1,5 @@
 {
-    "name": "db",
+    "name": "@climb-bro/db",
     "version": "1.0.0",
     "description": "",
     "types": "./dist/src/index.d.ts",

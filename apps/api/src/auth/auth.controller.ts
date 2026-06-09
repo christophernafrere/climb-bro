@@ -9,7 +9,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { ClimbingLevel, ClimbingType } from "db";
+import { ClimbingLevel, ClimbingType } from "@climb-bro/db";
 import type { Response } from "express";
 import { AuthGuard } from "./auth.guard";
 

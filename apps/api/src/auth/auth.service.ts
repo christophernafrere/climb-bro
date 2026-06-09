@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcryptjs";
-import { ClimbingLevel, ClimbingType } from "db";
+import { ClimbingLevel, ClimbingType } from "@climb-bro/db";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { prisma } from "db";
+import { prisma } from "@climb-bro/db";
 
 @Injectable()
 export class PartenarshipService {

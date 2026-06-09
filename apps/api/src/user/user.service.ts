@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { prisma, ClimbingType, ClimbingLevel } from "db";
+import { prisma, ClimbingType, ClimbingLevel } from "@climb-bro/db";
 import * as bcrypt from "bcryptjs";
 
 @Injectable()

@@ -6,6 +6,8 @@ import Link from "next/link";
 import colors from "@/lib/colors";
 import { Button } from "@/layouts/button";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { apiFetch } from "@/lib/api";
 
 export default function page() {
     const router = useRouter();
@@ -20,24 +22,25 @@ export default function page() {
                 onSubmit={async (e) => {
                     e.preventDefault();
 
-                    const response = await fetch(
-                        "http://localhost:8000/auth/sign-in",
-                        {
-                            method: "POST",
-                            credentials: "include",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                email,
-                                password,
-                            }),
+                    const response = await apiFetch("/auth/sign-in", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
                         },
-                    );
+                        body: JSON.stringify({
+                            email,
+                            password,
+                        }),
+                    });
 
                     if (response.ok) {
-                        // Rediriger vers la page d'accueil ou une autre page protégée
+                        toast.success("Connexion réussie !");
                         router.push("/");
+                    } else {
+                        toast.error(
+                            "Échec de la connexion. Vérifiez vos identifiants.",
+                        );
                     }
                 }}
             >

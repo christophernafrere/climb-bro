@@ -5,6 +5,7 @@ import StyledComponentsRegistry from "@/lib/registery";
 import TabBar from "@/layouts/tab-bar";
 import GlobalStyle from "./global-style";
 import Header from "@/layouts/header";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -69,6 +70,7 @@ export default function RootLayout({
                     <Header />
                     {children}
                     <TabBar />
+                    <ToastContainer />
                 </StyledComponentsRegistry>
             </body>
         </html>

@@ -1,12 +1,13 @@
 "use client";
-import React from "react";
 import styled from "styled-components";
 import colors from "@/lib/colors";
-import { usePathname } from "next/navigation";
-import { ArrowLeftIcon, BellIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ArrowLeftIcon, BellIcon, LogOutIcon } from "lucide-react";
+import { apiFetch } from "@/lib/api";
 
 export default function Header() {
     const pathName = usePathname();
+    const router = useRouter();
     const mainUrl = ["/", "/calendar", "/partner", "/profil"];
     return (
         <Container>
@@ -19,9 +20,22 @@ export default function Header() {
                 <h1>Climb Bro</h1>
             </LeftSide>
 
-            <NotificationButton>
-                <BellIcon />
-            </NotificationButton>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <NotificationButton>
+                    <BellIcon />
+                </NotificationButton>
+                <NotificationButton
+                    onClick={async () => {
+                        await apiFetch("/auth/logout", {
+                            method: "POST",
+                        });
+
+                        router.push("/auth/sign-in");
+                    }}
+                >
+                    <LogOutIcon />
+                </NotificationButton>
+            </div>
         </Container>
     );
 }
