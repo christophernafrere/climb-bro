@@ -84,6 +84,12 @@ export class AuthController {
         return { success: true };
     }
 
+    @Get("me")
+    @UseGuards(AuthGuard)
+    async me(@Req() request: any) {
+        return request.user;
+    }
+
     @Post("refresh")
     async refreshToken(
         @Req() request: any,

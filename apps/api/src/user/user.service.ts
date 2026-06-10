@@ -43,7 +43,19 @@ export class UserService {
             where: {
                 id,
             },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                weight: true,
+                preferedClimbingType: true,
+                climbingLevel: true,
+                createdAt: true,
+                imageUrl: true,
+                refreshToken: true,
+            },
         });
+
         return user;
     }
 

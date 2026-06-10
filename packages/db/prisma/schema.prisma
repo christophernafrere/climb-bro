@@ -13,6 +13,7 @@ model User {
   email                String        @unique
   weight               Float
   password             String
+  imageUrl             String?
   preferedClimbingType ClimbingType
   climbingLevel        ClimbingLevel
   initiedPartnerships  ClimberPartenarship[] @relation("InitiatedPartenarship")

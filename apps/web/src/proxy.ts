@@ -20,8 +20,8 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/profile",
-        "/profile/:path*",
+        // "/profile",
+        // "/profile/:path*",
         "/search",
         "/search/:path*",
         "/chat",

@@ -4,11 +4,32 @@ import colors from "@/lib/colors";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeftIcon, BellIcon, LogOutIcon } from "lucide-react";
 import { apiFetch } from "@/lib/api";
+import { useEffect, useState } from "react";
 
 export default function Header() {
     const pathName = usePathname();
-    const router = useRouter();
     const mainUrl = ["/", "/calendar", "/partner", "/profil"];
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await apiFetch("/auth/me", {
+                    method: "GET",
+                });
+                if (response.ok) {
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (error) {
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
+
     return (
         <Container>
             <LeftSide>
@@ -24,17 +45,19 @@ export default function Header() {
                 <NotificationButton>
                     <BellIcon />
                 </NotificationButton>
-                <NotificationButton
-                    onClick={async () => {
-                        await apiFetch("/auth/logout", {
-                            method: "POST",
-                        });
 
-                        router.push("/auth/sign-in");
-                    }}
-                >
-                    <LogOutIcon />
-                </NotificationButton>
+                {isLoggedIn && (
+                    <NotificationButton
+                        onClick={async () => {
+                            await apiFetch("/auth/logout", {
+                                method: "POST",
+                            });
+                            setIsLoggedIn(false);
+                        }}
+                    >
+                        <LogOutIcon />
+                    </NotificationButton>
+                )}
             </div>
         </Container>
     );
