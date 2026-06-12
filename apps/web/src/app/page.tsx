@@ -138,7 +138,8 @@ export default function Home() {
                                             : [...prev, filter.name],
                                     );
                             }
-                        }}>
+                        }}
+                    >
                         {filter.name}
                     </FilterButton>
                 ))}
@@ -202,6 +203,12 @@ const Filters = styled.div`
     overflow-y: hidden;
     max-width: 100%;
     padding-bottom: 4px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const FilterButton = styled.button<{ $selected?: boolean }>`
