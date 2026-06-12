@@ -36,8 +36,8 @@ export default function TabBar() {
             icon: Users2Icon,
         },
         {
-            name: "Profil",
-            href: "/profil",
+            name: "Profile",
+            href: "/profile",
             icon: User2Icon,
         },
     ];
@@ -50,7 +50,8 @@ export default function TabBar() {
                         key={tab.name || tab.href}
                         href={tab.href}
                         $main={tab.main}
-                        $selected={pathname === tab.href}>
+                        $selected={pathname === tab.href}
+                    >
                         <tab.icon size={tab.main ? 46 : 24} />
                         {tab.name}
                     </Tab>

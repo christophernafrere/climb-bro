@@ -5,8 +5,12 @@ import styled from "styled-components";
 import Link from "next/link";
 import colors from "@/lib/colors";
 import { Button } from "@/layouts/button";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { apiFetch } from "@/lib/api";
 
 export default function page() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +18,32 @@ export default function page() {
         <Main>
             <h1>Bienvenue au somet</h1>
             <p>Connecter vous pour retrouver votre communauté de grimpeur</p>
-            <Form>
+            <Form
+                onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    const response = await apiFetch("/auth/sign-in", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            email,
+                            password,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        toast.success("Connexion réussie !");
+                        router.push("/");
+                    } else {
+                        toast.error(
+                            "Échec de la connexion. Vérifiez vos identifiants.",
+                        );
+                    }
+                }}
+            >
                 <label>
                     Email
                     <Inputcontainer>

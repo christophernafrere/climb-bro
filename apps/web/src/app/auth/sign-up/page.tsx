@@ -1,18 +1,25 @@
 "use client";
 import { Button } from "@/layouts/button";
 import colors from "@/lib/colors";
-import { MountainIcon, Radio } from "lucide-react";
+import { MountainIcon } from "lucide-react";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import type { ClimbingLevel, ClimbingType } from "@climb-bro/db";
+import { useRouter } from "next/navigation";
+import { apiFetch } from "@/lib/api";
 
 export default function page() {
+    const router = useRouter();
     const [name, setName] = useState("");
     const [gender, setGender] = useState<string | null>(null);
-    const [weight, setWeight] = useState("");
+    const [weight, setWeight] = useState(0);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [climbType, setClimbType] = useState<string | null>(null);
+    const [climbType, setClimbType] = useState<ClimbingType | null>(null);
+    const [climbingLevel, setClimbingLevel] = useState<ClimbingLevel | null>(
+        null,
+    );
     const [cguAccepted, setCguAccepted] = useState(false);
 
     return (
@@ -23,7 +30,44 @@ export default function page() {
                 numéro.
             </p>
 
-            <Form>
+            <Form
+                onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (!cguAccepted) {
+                        alert(
+                            "Vous devez accepter les conditions générales d'utilisation.",
+                        );
+
+                        router.push("/auth/sign-up");
+                        return;
+                    }
+                    const response = await apiFetch("auth/sign-up", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            name,
+                            gender,
+                            weight,
+                            email,
+                            password,
+                            preferedClimbingType: climbType,
+                            climbingLevel,
+                        }),
+                    });
+                    const result = await response.json();
+                    if (!response.ok) {
+                        alert(
+                            result.message ||
+                                "Erreur lors de la création du compte.",
+                        );
+                        return;
+                    }
+                    alert("Compte créé avec succès !");
+                    router.push("/auth/sign-in");
+                }}
+            >
                 <FormPart>
                     <TitlePart> Identité et connexion </TitlePart>
                     <Label>
@@ -37,7 +81,8 @@ export default function page() {
                     <RadioSection>
                         Sexe (Discret)
                         <RadioGroup
-                            style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+                            style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+                        >
                             <RadioLabel $selected={gender === "male"}>
                                 <input
                                     type="radio"
@@ -72,7 +117,9 @@ export default function page() {
                         <input
                             type="number"
                             placeholder="70 kg"
-                            onChange={(e) => setWeight(e.target.value)}
+                            onChange={(e) =>
+                                setWeight(parseFloat(e.target.value) || 0)
+                            }
                         />
                     </Label>
                     <Label>
@@ -99,40 +146,41 @@ export default function page() {
                     <RadioSection>
                         Ton niveau actuel
                         <RadioGroup
-                            style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
-                            <RadioLabel $selected={climbType === "debutant"}>
+                            style={{ gridTemplateColumns: "repeat(2, 1fr)" }}
+                        >
+                            <RadioLabel $selected={climbingLevel === "l4a"}>
                                 <input
                                     type="radio"
-                                    name="climbType"
-                                    value="debutant"
-                                    onChange={() => setClimbType("debutant")}
+                                    name="climbLevel"
+                                    value="l4a"
+                                    onChange={() => setClimbingLevel("l4a")}
                                 />
                                 Débutant
                             </RadioLabel>
-                            <RadioLabel $selected={climbType === "5a-5c"}>
+                            <RadioLabel $selected={climbingLevel === "l5a"}>
                                 <input
                                     type="radio"
-                                    name="climbType"
-                                    value="5a-5c"
-                                    onChange={() => setClimbType("5a-5c")}
+                                    name="climbLevel"
+                                    value="l5a"
+                                    onChange={() => setClimbingLevel("l5a")}
                                 />
                                 5a - 5c
                             </RadioLabel>
-                            <RadioLabel $selected={climbType === "6a-6c"}>
+                            <RadioLabel $selected={climbingLevel === "l6a"}>
                                 <input
                                     type="radio"
-                                    name="climbType"
-                                    value="6a-6c"
-                                    onChange={() => setClimbType("6a-6c")}
+                                    name="climbLevel"
+                                    value="l6a"
+                                    onChange={() => setClimbingLevel("l6a")}
                                 />
                                 6a - 6c
                             </RadioLabel>
-                            <RadioLabel $selected={climbType === "7a+"}>
+                            <RadioLabel $selected={climbingLevel === "l7a"}>
                                 <input
                                     type="radio"
-                                    name="climbType"
-                                    value="7a+"
-                                    onChange={() => setClimbType("7a+")}
+                                    name="climbLevel"
+                                    value="l7a"
+                                    onChange={() => setClimbingLevel("l7a")}
                                 />
                                 7a et plus
                             </RadioLabel>
@@ -142,24 +190,25 @@ export default function page() {
                     <RadioSection>
                         Type préféré
                         <RadioGroup
-                            style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
-                            <RadioLabel $selected={climbType === "bloc"}>
+                            style={{ gridTemplateColumns: "repeat(2, 1fr)" }}
+                        >
+                            <RadioLabel $selected={climbType === "BLOC"}>
                                 <MountainIcon size={20} color={"#6C7A76"} />
                                 <input
                                     type="radio"
                                     name="climbType"
-                                    value="bloc"
-                                    onChange={() => setClimbType("bloc")}
+                                    value="BLOC"
+                                    onChange={() => setClimbType("BLOC")}
                                 />
                                 Bloc
                             </RadioLabel>
-                            <RadioLabel $selected={climbType === "salle"}>
+                            <RadioLabel $selected={climbType === "VOIE"}>
                                 <MountainIcon size={20} color={"#6C7A76"} />
                                 <input
                                     type="radio"
                                     name="climbType"
-                                    value="salle"
-                                    onChange={() => setClimbType("salle")}
+                                    value="VOIE"
+                                    onChange={() => setClimbType("VOIE")}
                                 />
                                 Salle
                             </RadioLabel>
@@ -179,7 +228,8 @@ export default function page() {
                 <Button
                     style={{ width: "100%", borderRadius: "8px" }}
                     color="primary"
-                    type="submit">
+                    type="submit"
+                >
                     Créer mon compte
                 </Button>
             </Form>
@@ -271,7 +321,8 @@ const RadioLabel = styled.label<{ $selected?: boolean }>`
     border-radius: 8px;
     border: 1px solid #bbcac5;
 
-    background: ${({ $selected }) => $selected && "#e0f7fa"};
+    background: ${({ $selected }) => $selected && colors.main.primary}88;
+    color: ${({ $selected }) => ($selected ? "white" : colors.text.strong)};
     input {
         display: none;
     }

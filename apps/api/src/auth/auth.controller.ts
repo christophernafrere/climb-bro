@@ -9,7 +9,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { ClimbingLevel, ClimbingType } from "db";
+import { ClimbingLevel, ClimbingType } from "@climb-bro/db";
 import type { Response } from "express";
 import { AuthGuard } from "./auth.guard";
 
@@ -82,6 +82,12 @@ export class AuthController {
         });
 
         return { success: true };
+    }
+
+    @Get("me")
+    @UseGuards(AuthGuard)
+    async me(@Req() request: any) {
+        return request.user;
     }
 
     @Post("refresh")

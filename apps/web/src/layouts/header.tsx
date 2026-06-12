@@ -1,13 +1,35 @@
 "use client";
-import React from "react";
 import styled from "styled-components";
 import colors from "@/lib/colors";
-import { usePathname } from "next/navigation";
-import { ArrowLeftIcon, BellIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ArrowLeftIcon, BellIcon, LogOutIcon } from "lucide-react";
+import { apiFetch } from "@/lib/api";
+import { useEffect, useState } from "react";
 
 export default function Header() {
     const pathName = usePathname();
     const mainUrl = ["/", "/calendar", "/partner", "/profil"];
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await apiFetch("/auth/me", {
+                    method: "GET",
+                });
+                if (response.ok) {
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (error) {
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
+
     return (
         <Container>
             <LeftSide>
@@ -19,9 +41,24 @@ export default function Header() {
                 <h1>Climb Bro</h1>
             </LeftSide>
 
-            <NotificationButton>
-                <BellIcon />
-            </NotificationButton>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <NotificationButton>
+                    <BellIcon />
+                </NotificationButton>
+
+                {isLoggedIn && (
+                    <NotificationButton
+                        onClick={async () => {
+                            await apiFetch("/auth/logout", {
+                                method: "POST",
+                            });
+                            setIsLoggedIn(false);
+                        }}
+                    >
+                        <LogOutIcon />
+                    </NotificationButton>
+                )}
+            </div>
         </Container>
     );
 }

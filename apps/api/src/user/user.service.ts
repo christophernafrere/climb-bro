@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { prisma, ClimbingType, ClimbingLevel } from "db";
+import { prisma, ClimbingType, ClimbingLevel } from "@climb-bro/db";
 import * as bcrypt from "bcryptjs";
 
 @Injectable()
@@ -43,7 +43,19 @@ export class UserService {
             where: {
                 id,
             },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                weight: true,
+                preferedClimbingType: true,
+                climbingLevel: true,
+                createdAt: true,
+                imageUrl: true,
+                refreshToken: true,
+            },
         });
+
         return user;
     }
 
