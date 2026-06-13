@@ -14,9 +14,41 @@ import {
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function page() {
     const router = useRouter();
+    const [userProfile, setUserProfile] = useState<{
+        name: string;
+        climbingLevel: string;
+        weight: number;
+        email: string;
+        _count: {
+            initiedPartnerships: number;
+            receivedPartnerships: number;
+        };
+    } | null>(null);
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const response = await apiFetch("/user/me");
+                console.log("User profile retrieved:", response);
+
+                const data = await response.json();
+                console.log("User profile data:", data);
+                setUserProfile(data);
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+                toast.error(
+                    "Erreur lors de la récupération du profil utilisateur.",
+                );
+            }
+        };
+
+        fetchUserProfile();
+    }, []);
+
     return (
         <Main>
             <ProfileContainer>
@@ -28,9 +60,12 @@ export default function page() {
                 </ProfilePictureContainer>
 
                 <ProfileDataContainer>
-                    <h1>John Doe</h1>
+                    <h1> {userProfile?.name || "John Doe"} </h1>
 
-                    <ClimbTag>Niveau 6b</ClimbTag>
+                    <ClimbTag>
+                        Niveau{" "}
+                        {userProfile?.climbingLevel?.toUpperCase() || "Inconnu"}
+                    </ClimbTag>
                 </ProfileDataContainer>
             </ProfileContainer>
 
@@ -41,7 +76,10 @@ export default function page() {
                 </StatItem>
                 <StatItem>
                     <StatLabel>Partenaires</StatLabel>
-                    <StatValue>120</StatValue>
+                    <StatValue>
+                        {(userProfile?._count.initiedPartnerships || 0) +
+                            (userProfile?._count.receivedPartnerships || 0)}
+                    </StatValue>
                 </StatItem>
                 <StatItem>
                     <StatLabel>Fiabilité</StatLabel>
@@ -97,9 +135,10 @@ export default function page() {
                     </SettingsButton>
                     <SettingsButton
                         onClick={async () => {
-                            await apiFetch("/api/auth/logout", {
+                            await apiFetch("/auth/logout", {
                                 method: "POST",
                             });
+                            toast.success("Déconnexion réussie !");
                             router.push("/");
                         }}
                     >

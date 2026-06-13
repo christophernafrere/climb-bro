@@ -1,10 +1,5 @@
 const CACHE_NAME = "climb-bro-pwa-v1";
-const PRECACHE_URLS = [
-    "/",
-    "/icon.svg",
-    "/apple-icon.svg",
-    "/manifest.webmanifest",
-];
+const PRECACHE_URLS = ["/", "/icon.svg", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
