@@ -52,6 +52,12 @@ export class UserService {
                 climbingLevel: true,
                 createdAt: true,
                 imageUrl: true,
+                _count: {
+                    select: {
+                        initiedPartnerships: true,
+                        receivedPartnerships: true,
+                    },
+                },
                 refreshToken: true,
             },
         });
