@@ -13,7 +13,7 @@ export class PartenarshipController {
     ) {
         const newPartenarship =
             await this.partenarshipService.addClimbingPartenar(
-                req.user.userId,
+                req.user.id,
                 partenarId,
             );
         return newPartenarship;
@@ -27,7 +27,7 @@ export class PartenarshipController {
     ) {
         const removedPartenarship =
             await this.partenarshipService.removeClimbingPartenar(
-                req.user.userId,
+                req.user.id,
                 partenarId,
             );
         return removedPartenarship;
@@ -37,7 +37,7 @@ export class PartenarshipController {
     @Get()
     async getClimbingPartenars(@Req() req: any) {
         const partenars = await this.partenarshipService.getClimbingPartenars(
-            req.user.userId,
+            req.user.id,
         );
         return partenars;
     }
