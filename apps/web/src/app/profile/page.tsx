@@ -10,6 +10,7 @@ import {
     LogOutIcon,
     ShieldCogIcon,
     ChevronRightIcon,
+    RectangleEllipsisIcon,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/navigation";
@@ -80,7 +81,7 @@ export default function page() {
                         <ChevronRightIcon />
                     </SettingsButton>
                     <SettingsButton>
-                        <BellIcon />
+                        <RectangleEllipsisIcon />
                         <ButtonTitle>Changer de mot de passe</ButtonTitle>
                         <ChevronRightIcon />
                     </SettingsButton>
@@ -121,6 +122,7 @@ const Main = styled.main`
 `;
 
 const ProfileContainer = styled.div`
+    position: relative;
     width: 100%;
     box-sizing: border-box;
     display: flex;
@@ -131,6 +133,19 @@ const ProfileContainer = styled.div`
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid ${colors.main.primary}22;
+    overflow: hidden;
+    &::before {
+        content: "";
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: ${colors.main.primary}22;
+        z-index: 1;
+        pointer-events: none;
+    }
 `;
 
 const ProfilePictureContainer = styled.div`
@@ -294,5 +309,6 @@ const SettingsButton = styled.button`
 const ButtonTitle = styled.span`
     width: 100%;
     font-size: 14px;
+    text-align: left;
     font-weight: 500;
 `;
