@@ -101,7 +101,7 @@ export class AuthController {
         }
 
         try {
-            const userId = request.user?.userId;
+            const userId = request.user?.id;
             const { access_token, refresh_token } =
                 await this.authService.refresh(userId, refreshToken);
             response.cookie("access_token", access_token, {
@@ -133,7 +133,7 @@ export class AuthController {
         @Req() request: any,
         @Res({ passthrough: true }) response: Response,
     ) {
-        const userId = request.user?.userId;
+        const userId = request.user?.id;
 
         await this.authService.logout(userId);
 

@@ -67,7 +67,7 @@ export class AuthService {
                 throw new Error("Invalid email or password");
             }
 
-            const payload = { userId: user.id, email: user.email };
+            const payload = { id: user.id, email: user.email };
 
             const access_token = this.jwtService.sign(payload, {
                 expiresIn: "15m",
