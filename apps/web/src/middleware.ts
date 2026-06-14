@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
     const token = request.cookies.get("access_token")?.value;
 
     const pathname = request.nextUrl.pathname;
@@ -28,7 +28,5 @@ export const config = {
         "/chat/:path*",
         "/partner",
         "/partner/:path*",
-        "/auth/sign-in",
-        "/auth/sign-up",
     ],
 };
