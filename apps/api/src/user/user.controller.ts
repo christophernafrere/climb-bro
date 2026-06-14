@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Req, Res, UseGuards } from "@nestjs/common";
+import { Controller, Get, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/auth/auth.guard";
 import { UserService } from "./user.service";
 
@@ -18,24 +18,5 @@ export class UserController {
         console.log("User profile retrieved:", user);
 
         return user;
-    }
-
-    @UseGuards(AuthGuard)
-    @Put("profile/picture")
-    async modifyProfilePicture(
-        @Req() request: any,
-        @Res({ passthrough: true }) response: Response,
-    ) {
-        const userId = request.user.id;
-        const { imageUrl } = request.body;
-
-        const updatedUser = await this.userService.modifyProfilePicture(
-            userId,
-            imageUrl,
-        );
-
-        console.log("User profile picture updated:", updatedUser);
-
-        return updatedUser;
     }
 }
