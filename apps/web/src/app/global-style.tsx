@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         margin: 0;
         padding: 0;
-        font-family: var(--font-geist-sans), sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         background-color: ${colors.surface.cream}
 
     }

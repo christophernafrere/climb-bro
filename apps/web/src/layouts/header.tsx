@@ -1,34 +1,49 @@
 "use client";
 import styled from "styled-components";
 import colors from "@/lib/colors";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ArrowLeftIcon, BellIcon, LogOutIcon } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
 
 export default function Header() {
     const pathName = usePathname();
-    const mainUrl = ["/", "/calendar", "/partner", "/profil"];
+    const mainUrl = ["/", "/calendar", "/partner", "/profile"];
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
+        if (pathName.startsWith("/auth/")) {
+            setIsLoggedIn(false);
+            return;
+        }
+
+        let isMounted = true;
+
         const checkAuth = async () => {
             try {
                 const response = await apiFetch("/auth/me", {
                     method: "GET",
+                    skipAuthRefresh: true,
+                    redirectOnUnauthorized: false,
                 });
-                if (response.ok) {
+                if (isMounted && response.ok) {
                     setIsLoggedIn(true);
-                } else {
+                } else if (isMounted) {
                     setIsLoggedIn(false);
                 }
-            } catch (error) {
-                setIsLoggedIn(false);
+            } catch {
+                if (isMounted) {
+                    setIsLoggedIn(false);
+                }
             }
         };
 
         checkAuth();
-    }, []);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [pathName]);
 
     return (
         <Container>

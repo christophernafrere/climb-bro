@@ -40,10 +40,11 @@ export default function page() {
         const fetchUserProfile = async () => {
             try {
                 const response = await apiFetch("/user/me");
-                console.log("User profile retrieved:", response);
+                if (!response.ok) {
+                    throw new Error("Unable to fetch user profile");
+                }
 
                 const data = await response.json();
-                console.log("User profile data:", data);
                 setUserProfile(data);
             } catch (error) {
                 console.error("Error fetching user profile:", error);

@@ -91,10 +91,16 @@ export class AuthService {
         }
     }
 
-    async refresh(userId: string, refresh_token: string) {
-        const payload = this.jwtService.verify(refresh_token);
+    async refresh(refresh_token: string) {
+        const payload = this.jwtService.verify<{
+            id: string;
+            email: string;
+        }>(refresh_token);
+        const tokenPayload = { id: payload.id, email: payload.email };
 
-        const user = await this.userService.getUserById(userId);
+        const user = await this.userService.getUserWithRefreshTokenById(
+            tokenPayload.id,
+        );
         if (!user || !user.refreshToken) {
             throw new Error("Invalid refresh token");
         }
@@ -104,15 +110,18 @@ export class AuthService {
             throw new Error("Invalid refresh token");
         }
 
-        const access_token = this.jwtService.sign(payload, {
+        const access_token = this.jwtService.sign(tokenPayload, {
             expiresIn: "15m",
         });
 
-        const new_refresh_token = this.jwtService.sign(payload, {
+        const new_refresh_token = this.jwtService.sign(tokenPayload, {
             expiresIn: "30d",
         });
 
-        await this.userService.updateRefreshToken(userId, new_refresh_token);
+        await this.userService.updateRefreshToken(
+            tokenPayload.id,
+            new_refresh_token,
+        );
 
         return { access_token, refresh_token: new_refresh_token };
     }

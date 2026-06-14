@@ -6,6 +6,7 @@ import {
     Post,
     Req,
     Res,
+    UnauthorizedException,
     UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
@@ -97,13 +98,12 @@ export class AuthController {
     ) {
         const refreshToken = request.cookies["refresh_token"];
         if (!refreshToken) {
-            return { success: false, message: "No refresh token provided" };
+            throw new UnauthorizedException("No refresh token provided");
         }
 
         try {
-            const userId = request.user?.id;
             const { access_token, refresh_token } =
-                await this.authService.refresh(userId, refreshToken);
+                await this.authService.refresh(refreshToken);
             response.cookie("access_token", access_token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
@@ -116,8 +116,9 @@ export class AuthController {
                 sameSite: "lax",
                 maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
             });
+            return { success: true };
         } catch (error) {
-            return { success: false, message: "Invalid refresh token" };
+            throw new UnauthorizedException("Invalid refresh token");
         }
     }
 

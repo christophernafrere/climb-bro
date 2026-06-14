@@ -15,8 +15,6 @@ export class UserController {
 
         const user = await this.userService.getUserById(userId);
 
-        console.log("User profile retrieved:", user);
-
         return user;
     }
 
@@ -33,8 +31,6 @@ export class UserController {
             userId,
             imageUrl,
         );
-
-        console.log("User profile picture updated:", updatedUser);
 
         return updatedUser;
     }

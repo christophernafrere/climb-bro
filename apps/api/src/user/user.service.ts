@@ -58,6 +58,34 @@ export class UserService {
                         receivedPartnerships: true,
                     },
                 },
+            },
+        });
+
+        return user;
+    }
+
+    async getUserWithRefreshTokenById(id: string) {
+        if (!id) return null;
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                weight: true,
+                preferedClimbingType: true,
+                climbingLevel: true,
+                createdAt: true,
+                imageUrl: true,
+                _count: {
+                    select: {
+                        initiedPartnerships: true,
+                        receivedPartnerships: true,
+                    },
+                },
                 refreshToken: true,
             },
         });
