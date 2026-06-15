@@ -11,11 +11,14 @@ import {
     ShieldCogIcon,
     ChevronRightIcon,
     RectangleEllipsisIcon,
+    PencilIcon,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Popup from "@/layouts/popup";
+import ModifyProfilePicturePopup from "@/components/popup-profile-picture";
 
 export default function page() {
     const router = useRouter();
@@ -24,20 +27,23 @@ export default function page() {
         climbingLevel: string;
         weight: number;
         email: string;
+        imageUrl: string;
         _count: {
             initiedPartnerships: number;
             receivedPartnerships: number;
         };
     } | null>(null);
+
+    const [openPopupProfilePicture, setOpenPopupProfilePicture] =
+        useState(false);
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
                 const response = await apiFetch("/user/me");
-                if (!response.ok) {
-                    throw new Error("Unable to fetch user profile");
-                }
+                console.log("User profile retrieved:", response);
 
                 const data = await response.json();
+                console.log("User profile data:", data);
                 setUserProfile(data);
             } catch (error) {
                 console.error("Error fetching user profile:", error);
@@ -55,9 +61,14 @@ export default function page() {
             <ProfileContainer>
                 <ProfilePictureContainer>
                     <img
-                        src="https://avatars.githubusercontent.com/u/105328960?v=4"
+                        src={userProfile?.imageUrl || "/img/no-user.png"}
                         alt="Profile Picture"
                     />
+                    <PPEditButton
+                        onClick={() => setOpenPopupProfilePicture(true)}
+                    >
+                        <PencilIcon color="white" size={16} />
+                    </PPEditButton>
                 </ProfilePictureContainer>
 
                 <ProfileDataContainer>
@@ -65,7 +76,9 @@ export default function page() {
 
                     <ClimbTag>
                         Niveau{" "}
-                        {userProfile?.climbingLevel?.toUpperCase() || "Inconnu"}
+                        {userProfile?.climbingLevel
+                            ?.split("l")[1]
+                            .toUpperCase() || "Inconnu"}
                     </ClimbTag>
                 </ProfileDataContainer>
             </ProfileContainer>
@@ -149,6 +162,13 @@ export default function page() {
                     </SettingsButton>
                 </SettingsList>
             </SettingsSection>
+            {openPopupProfilePicture && (
+                <ModifyProfilePicturePopup
+                    isOpen={openPopupProfilePicture}
+                    onClose={() => setOpenPopupProfilePicture(false)}
+                    oldProfilePicture={userProfile?.imageUrl || null}
+                />
+            )}
         </Main>
     );
 }
@@ -188,11 +208,15 @@ const ProfileContainer = styled.div`
     }
 `;
 
-const ProfilePictureContainer = styled.div`
+const ProfilePictureContainer = styled.label`
+    display: block;
     position: relative;
     width: 50px;
     height: 50px;
 
+    input {
+        display: none;
+    }
     img {
         object-fit: cover;
         width: 100%;
@@ -202,18 +226,21 @@ const ProfilePictureContainer = styled.div`
         overflow: hidden;
         border: 3px solid ${colors.main.primary}AA;
     }
+`;
 
-    &::after {
-        content: "";
-        position: absolute;
-        bottom: -8px;
-        right: -8px;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        border: 3px solid ${colors.main.primary}AA;
-        background-color: white;
-    }
+const PPEditButton = styled.div`
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: ${colors.main.primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    cursor: pointer;
 `;
 
 const ProfileDataContainer = styled.div`
