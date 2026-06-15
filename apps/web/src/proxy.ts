@@ -20,8 +20,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/auth/sign-in",
-        "/auth/sign-up",
         "/profile",
         "/profile/:path*",
         "/search",

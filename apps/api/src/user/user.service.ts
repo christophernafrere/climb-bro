@@ -121,21 +121,4 @@ export class UserService {
 
         return updatedUser;
     }
-
-    async modifyProfilePicture(userId: string, imageUrl: string) {
-        const user = await this.getUserById(userId);
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        const updatedUser = await prisma.user.update({
-            where: {
-                id: userId,
-            },
-            data: {
-                imageUrl,
-            },
-        });
-        return updatedUser;
-    }
 }
