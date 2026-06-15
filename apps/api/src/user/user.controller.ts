@@ -15,8 +15,23 @@ export class UserController {
 
         const user = await this.userService.getUserById(userId);
 
-        console.log("User profile retrieved:", user);
-
         return user;
+    }
+
+    @UseGuards(AuthGuard)
+    @Put("profile/picture")
+    async modifyProfilePicture(
+        @Req() request: any,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const userId = request.user.id;
+        const { imageUrl } = request.body;
+
+        const updatedUser = await this.userService.modifyProfilePicture(
+            userId,
+            imageUrl,
+        );
+
+        return updatedUser;
     }
 }

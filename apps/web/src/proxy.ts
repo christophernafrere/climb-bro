@@ -28,7 +28,5 @@ export const config = {
         "/chat/:path*",
         "/partner",
         "/partner/:path*",
-        "/auth/sign-in",
-        "/auth/sign-up",
     ],
 };

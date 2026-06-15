@@ -1,5 +1,14 @@
-const CACHE_NAME = "climb-bro-pwa-v1";
+const CACHE_NAME = "climb-bro-pwa-v2";
 const PRECACHE_URLS = ["/", "/icon.svg", "/manifest.webmanifest"];
+const CACHEABLE_DESTINATIONS = new Set(["image", "font"]);
+
+function isNextInternalRequest(url) {
+    return (
+        url.pathname.startsWith("/_next/") ||
+        url.pathname.startsWith("/__nextjs") ||
+        url.searchParams.has("_rsc")
+    );
+}
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -24,9 +33,12 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+    const url = new URL(event.request.url);
+
     if (
         event.request.method !== "GET" ||
-        new URL(event.request.url).origin !== self.location.origin
+        url.origin !== self.location.origin ||
+        isNextInternalRequest(url)
     ) {
         return;
     }
@@ -41,6 +53,10 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    if (!CACHEABLE_DESTINATIONS.has(event.request.destination)) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
             if (cachedResponse) {
@@ -49,6 +65,10 @@ self.addEventListener("fetch", (event) => {
 
             return fetch(event.request)
                 .then((networkResponse) => {
+                    if (!networkResponse.ok || networkResponse.type !== "basic") {
+                        return networkResponse;
+                    }
+
                     const responseClone = networkResponse.clone();
 
                     caches.open(CACHE_NAME).then((cache) => {

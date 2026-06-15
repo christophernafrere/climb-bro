@@ -1,21 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import PwaRegistration from "@/lib/register-pwa";
 import StyledComponentsRegistry from "@/lib/registery";
 import TabBar from "@/layouts/tab-bar";
 import GlobalStyle from "./global-style";
 import Header from "@/layouts/header";
 import { ToastContainer } from "react-toastify";
-
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
     title: "Climb Bro",
@@ -63,7 +52,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <body>
                 <StyledComponentsRegistry>
                     <GlobalStyle />
                     <PwaRegistration />
