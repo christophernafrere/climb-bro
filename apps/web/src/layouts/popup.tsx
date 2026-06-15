@@ -11,7 +11,7 @@ export default function Popup({
     isOpen: boolean;
     onClose: () => void;
     children: React.ReactNode;
-    style: React.CSSProperties;
+    style?: React.CSSProperties;
 }) {
     useEffect(() => {
         if (isOpen) {
@@ -29,7 +29,8 @@ export default function Popup({
             onClick={() => {
                 onClose();
             }}
-            style={{ display: isOpen ? "flex" : "none" }}>
+            style={{ display: isOpen ? "flex" : "none" }}
+        >
             <Container style={style} onClick={(e) => e.stopPropagation()}>
                 {children}
             </Container>

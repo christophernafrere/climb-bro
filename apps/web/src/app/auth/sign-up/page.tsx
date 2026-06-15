@@ -1,13 +1,14 @@
 "use client";
 import { Button } from "@/layouts/button";
 import colors from "@/lib/colors";
-import { MountainIcon } from "lucide-react";
+import { CameraIcon, MountainIcon } from "lucide-react";
 import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import type { ClimbingLevel, ClimbingType } from "@climb-bro/db";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { uploadImage } from "@/lib/upload";
 
 export default function page() {
     const router = useRouter();
@@ -20,6 +21,7 @@ export default function page() {
     const [climbingLevel, setClimbingLevel] = useState<ClimbingLevel | null>(
         null,
     );
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const [cguAccepted, setCguAccepted] = useState(false);
 
     return (
@@ -41,7 +43,10 @@ export default function page() {
                         router.push("/auth/sign-up");
                         return;
                     }
-                    const response = await apiFetch("auth/sign-up", {
+
+                    const imageUrl = await uploadImage(profilePicture as File);
+
+                    const response = await apiFetch("/auth/sign-up", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -54,6 +59,7 @@ export default function page() {
                             password,
                             preferedClimbingType: climbType,
                             climbingLevel,
+                            imageUrl,
                         }),
                     });
                     const result = await response.json();
@@ -70,6 +76,35 @@ export default function page() {
             >
                 <FormPart>
                     <TitlePart> Identité et connexion </TitlePart>
+                    <PofilePictureContainer>
+                        <PhotoProfilButton>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        setProfilePicture(file);
+                                    }
+                                }}
+                            />
+                            {profilePicture ? (
+                                <img
+                                    src={URL.createObjectURL(profilePicture)}
+                                    alt="Profile Preview"
+                                />
+                            ) : (
+                                <CameraIcon
+                                    size={24}
+                                    color={colors.main.primary}
+                                />
+                            )}
+                            <PlusButton>+</PlusButton>
+                        </PhotoProfilButton>
+
+                        <p> Ajouter une photo de profil</p>
+                    </PofilePictureContainer>
+
                     <Label>
                         Prénom ou Pseudo
                         <input
@@ -334,4 +369,49 @@ const CGULabel = styled.label`
     display: flex;
     align-items: center;
     gap: 8px;
+`;
+
+const PofilePictureContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    input {
+        display: none;
+    }
+`;
+
+const PhotoProfilButton = styled.label`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border: 2px dashed ${colors.main.primary}aa;
+    background: ${colors.main.primary}11;
+    border-radius: 100%;
+    cursor: pointer;
+    position: relative;
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        object-fit: cover;
+    }
+`;
+
+const PlusButton = styled.div`
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: ${colors.main.primary};
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
 `;
