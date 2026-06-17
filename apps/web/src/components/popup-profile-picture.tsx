@@ -48,12 +48,16 @@ export default function ModifyProfilePicturePopup({
 
                     const newImageUrl = uploadImage(profilePicture);
 
-                    const response = await apiFetch("/user/profile/picture", {
-                        method: "PUT",
-                        body: JSON.stringify({
-                            imageUrl: (await newImageUrl).secure_url,
-                        }),
-                    });
+                    const response = await apiFetch(
+                        "/user/profile/picture",
+                        {
+                            method: "PUT",
+                            body: JSON.stringify({
+                                imageUrl: (await newImageUrl).secure_url,
+                            }),
+                        },
+                        router,
+                    );
 
                     if (!response.ok) {
                         toast.error(

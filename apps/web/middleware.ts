@@ -1,9 +1,7 @@
-export { proxy } from "./src/proxy";
+export { middleware } from "./src/proxy";
 
 export const config = {
     matcher: [
-        "/auth/sign-in",
-        "/auth/sign-up",
         "/profile",
         "/profile/:path*",
         "/search",

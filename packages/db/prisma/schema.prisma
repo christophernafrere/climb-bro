@@ -8,9 +8,9 @@ datasource db {
 }
 
 model User {
-  id                   String        @id @default(uuid())
+  id                   String                @id @default(uuid())
   name                 String
-  email                String        @unique
+  email                String                @unique
   weight               Float
   password             String
   imageUrl             String?
@@ -18,19 +18,37 @@ model User {
   climbingLevel        ClimbingLevel
   initiedPartnerships  ClimberPartenarship[] @relation("InitiatedPartenarship")
   receivedPartnerships ClimberPartenarship[] @relation("ReceivedPartenarship")
-  isEnabled            Boolean       @default(false)
-  createdAt            DateTime      @default(now())
+  climbingSessions     ClimbingSession[]
+  isEnabled            Boolean               @default(false)
+  createdClimbingSessions ClimbingSession[] @relation("ClimbingSessionCreator")
+  createdAt            DateTime              @default(now())
   refreshToken         String?
 }
 
 model ClimberPartenarship {
-  id         String   @id @default(uuid())
+  id          String   @id @default(uuid())
   initiatorId String
-  receptorId String
-  isAccepted Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  initiator User @relation("InitiatedPartenarship", fields: [initiatorId], references: [id])
-  receiver User @relation("ReceivedPartenarship", fields: [receptorId], references: [id])
+  receptorId  String
+  isAccepted  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  initiator   User     @relation("InitiatedPartenarship", fields: [initiatorId], references: [id])
+  receiver    User     @relation("ReceivedPartenarship", fields: [receptorId], references: [id])
+  @@unique([initiatorId, receptorId])
+}
+
+model ClimbingSession {
+  id                  String        @id @default(uuid())
+  name                String
+  type                ClimbingType
+  Date                DateTime
+  message             String?
+  requiredLevel       ClimbingLevel
+  maxClimbers         Int
+  onlyForPartnerships Boolean       @default(false)
+  creatorId           String
+  creator             User          @relation("ClimbingSessionCreator", fields: [creatorId], references: [id])
+  climbers            User[]
+  createdAt           DateTime      @default(now())
 }
 
 enum ClimbingType {

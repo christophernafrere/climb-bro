@@ -1,28 +1,58 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
+import {
+    ConflictException,
+    Controller,
+    Get,
+    Param,
+    Post,
+    Req,
+    UseGuards,
+} from "@nestjs/common";
 import { AuthGuard } from "src/auth/auth.guard";
 import { PartenarshipService } from "./partenarship.service";
 
-@Controller("partenarship")
+@Controller("partnership")
 export class PartenarshipController {
     constructor(private readonly partenarshipService: PartenarshipService) {}
+
     @UseGuards(AuthGuard)
-    @Post("add")
+    @Post("add/:partenarId")
     async addClimbingPartenar(
-        @Body("partenarId") partenarId: string,
         @Req() req: any,
+        @Param("partenarId") partenarId: string,
     ) {
-        const newPartenarship =
-            await this.partenarshipService.addClimbingPartenar(
-                req.user.id,
-                partenarId,
-            );
-        return newPartenarship;
+        try {
+            const addedPartenarship =
+                await this.partenarshipService.addClimbingPartenar(
+                    req.user.id,
+                    partenarId,
+                );
+            return addedPartenarship;
+        } catch (error) {
+            if (
+                error instanceof Error &&
+                error.message === "uniconstraint violation"
+            ) {
+                throw new ConflictException("Cet ami est déjà ajouté.");
+            }
+            throw error;
+        }
     }
 
     @UseGuards(AuthGuard)
-    @Post("remove")
+    @Get("check/:id")
+    async checkClimbingPartenar(@Param("id") id: string, @Req() req: any) {
+        const isChecked = await this.partenarshipService.checkClimbingPartenar(
+            req.user.id,
+            id,
+        );
+
+        return isChecked;
+    }
+
+    @UseGuards(AuthGuard)
+    @Post("remove/:partenarId")
     async removeClimbingPartenar(
-        @Body("partenarId") partenarId: string,
+        @Param("partenarId") partenarId: string,
         @Req() req: any,
     ) {
         const removedPartenarship =

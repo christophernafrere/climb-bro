@@ -22,17 +22,21 @@ export default function page() {
                 onSubmit={async (e) => {
                     e.preventDefault();
 
-                    const response = await apiFetch("/auth/sign-in", {
-                        method: "POST",
-                        credentials: "include",
-                        headers: {
-                            "Content-Type": "application/json",
+                    const response = await apiFetch(
+                        "/auth/sign-in",
+                        {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                email,
+                                password,
+                            }),
                         },
-                        body: JSON.stringify({
-                            email,
-                            password,
-                        }),
-                    });
+                        router,
+                    );
 
                     if (response.ok) {
                         toast.success("Connexion réussie !");
