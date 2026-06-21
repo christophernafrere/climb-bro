@@ -18,7 +18,7 @@ model User {
   climbingLevel        ClimbingLevel
   initiedPartnerships  ClimberPartenarship[] @relation("InitiatedPartenarship")
   receivedPartnerships ClimberPartenarship[] @relation("ReceivedPartenarship")
-  climbingSessions     ClimbingSession[]
+  climbingSessions     ClimbingSession[] @relation("ClimbingSessionClimbers")
   isEnabled            Boolean               @default(false)
   createdClimbingSessions ClimbingSession[] @relation("ClimbingSessionCreator")
   createdAt            DateTime              @default(now())
@@ -40,14 +40,14 @@ model ClimbingSession {
   id                  String        @id @default(uuid())
   name                String
   type                ClimbingType
-  Date                DateTime
+  date                DateTime
   message             String?
-  requiredLevel       ClimbingLevel
   maxClimbers         Int
-  onlyForPartnerships Boolean       @default(false)
+  requiredLevel       ClimbingLevel
+  onlyForPartner Boolean       @default(false)
   creatorId           String
   creator             User          @relation("ClimbingSessionCreator", fields: [creatorId], references: [id])
-  climbers            User[]
+  climbers            User[]        @relation("ClimbingSessionClimbers")
   createdAt           DateTime      @default(now())
 }
 
