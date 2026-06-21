@@ -46,22 +46,26 @@ export default function page() {
 
                     const imageUrl = await uploadImage(profilePicture as File);
 
-                    const response = await apiFetch("/auth/sign-up", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
+                    const response = await apiFetch(
+                        "/auth/sign-up",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                name,
+                                gender,
+                                weight,
+                                email,
+                                password,
+                                preferedClimbingType: climbType,
+                                climbingLevel,
+                                imageUrl,
+                            }),
                         },
-                        body: JSON.stringify({
-                            name,
-                            gender,
-                            weight,
-                            email,
-                            password,
-                            preferedClimbingType: climbType,
-                            climbingLevel,
-                            imageUrl,
-                        }),
-                    });
+                        router,
+                    );
                     const result = await response.json();
                     if (!response.ok) {
                         alert(

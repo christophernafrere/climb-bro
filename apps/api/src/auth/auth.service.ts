@@ -101,6 +101,7 @@ export class AuthService {
         const user = await this.userService.getUserWithRefreshTokenById(
             tokenPayload.id,
         );
+
         if (!user || !user.refreshToken) {
             throw new Error("Invalid refresh token");
         }

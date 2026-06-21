@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
     const token = request.cookies.get("access_token")?.value;
+
+    console.log(request.cookies.getAll());
 
     const pathname = request.nextUrl.pathname;
     const isAuthPage =

@@ -1,3 +1,5 @@
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 type ApiFetchOptions = RequestInit & {
@@ -24,6 +26,7 @@ function shouldSkipRefresh(endpoint: string, skipAuthRefresh?: boolean) {
 export async function apiFetch(
     endpoint: string,
     options: ApiFetchOptions = {},
+    router?: AppRouterInstance,
 ) {
     const {
         skipAuthRefresh,
@@ -49,7 +52,10 @@ export async function apiFetch(
         headers: requestHeaders,
     });
 
-    if (response.status === 401 && !shouldSkipRefresh(endpoint, skipAuthRefresh)) {
+    if (
+        response.status === 401 &&
+        !shouldSkipRefresh(endpoint, skipAuthRefresh)
+    ) {
         const refreshResponse = await fetch(`${API_URL}/auth/refresh`, {
             method: "POST",
             credentials: "include",
@@ -57,7 +63,7 @@ export async function apiFetch(
 
         if (!refreshResponse.ok) {
             if (redirectOnUnauthorized && typeof window !== "undefined") {
-                window.location.href = "/auth/sign-in";
+                router?.push("/auth/sign-in");
             }
             throw new Error("Unauthorized");
         }

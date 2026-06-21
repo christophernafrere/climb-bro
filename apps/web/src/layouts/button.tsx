@@ -17,4 +17,9 @@ export const Button = styled.button<{ color?: "primary" | "secondary" }>`
     font-weight: bold;
     border: none;
     border-radius: 9999px;
+
+    &:disabled {
+        background-color: ${colors.main.primary}99;
+        cursor: not-allowed;
+    }
 `;

@@ -1,25 +1,36 @@
 import { Injectable } from "@nestjs/common";
-import { prisma } from "@climb-bro/db";
+import { Prisma, prisma } from "@climb-bro/db";
 
 @Injectable()
 export class PartenarshipService {
     async addClimbingPartenar(userId: string, partnerId: string) {
-        const updatedUser = await prisma.climberPartenarship.create({
-            data: {
-                id: userId,
-                initiator: {
-                    connect: {
-                        id: userId,
+        try {
+            const updatedUser = await prisma.climberPartenarship.create({
+                data: {
+                    id: userId,
+                    initiator: {
+                        connect: {
+                            id: userId,
+                        },
+                    },
+                    receiver: {
+                        connect: {
+                            id: partnerId,
+                        },
                     },
                 },
-                receiver: {
-                    connect: {
-                        id: partnerId,
-                    },
-                },
-            },
-        });
-        return updatedUser;
+            });
+            return updatedUser;
+        } catch (error) {
+            if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === "P2002"
+            ) {
+                throw new Error("uniconstraint violation");
+            }
+
+            throw error;
+        }
     }
 
     async removeClimbingPartenar(userId: string, partnerId: string) {
@@ -88,5 +99,31 @@ export class PartenarshipService {
             ...(user?.initiedPartnerships ?? []),
             ...(user?.receivedPartnerships ?? []),
         ];
+    }
+
+    async checkClimbingPartenar(userId: string, partnerId: string) {
+        const partnership = await prisma.climberPartenarship.findFirst({
+            where: {
+                AND: [
+                    {
+                        OR: [
+                            {
+                                initiatorId: userId,
+                                receptorId: partnerId,
+                            },
+                            {
+                                initiatorId: partnerId,
+                                receptorId: userId,
+                            },
+                        ],
+                    },
+                    {
+                        isAccepted: true,
+                    },
+                ],
+            },
+        });
+
+        return !!partnership;
     }
 }

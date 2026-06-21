@@ -1,12 +1,13 @@
 "use client";
 import styled from "styled-components";
 import colors from "@/lib/colors";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeftIcon, BellIcon, LogOutIcon } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { useEffect, useState } from "react";
 
 export default function Header() {
+    const router = useRouter();
     const pathName = usePathname();
     const mainUrl = ["/", "/calendar", "/partner", "/profile"];
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,9 +65,13 @@ export default function Header() {
                 {isLoggedIn && (
                     <NotificationButton
                         onClick={async () => {
-                            await apiFetch("/auth/logout", {
-                                method: "POST",
-                            });
+                            await apiFetch(
+                                "/auth/logout",
+                                {
+                                    method: "POST",
+                                },
+                                router,
+                            );
                             setIsLoggedIn(false);
                         }}
                     >

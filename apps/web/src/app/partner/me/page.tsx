@@ -5,9 +5,30 @@ import QRCode from "react-qr-code";
 import { Button } from "@/layouts/button";
 import { ScanQrCodeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 export default function MyQrCodePage() {
     const router = useRouter();
+    const [user, setUser] = useState<{
+        id: string;
+        name: string;
+        climbingLevel: string;
+        imageUrl: string;
+    }>();
+
+    useEffect(() => {
+        const fetchMyData = async () => {
+            const response = await apiFetch("/user/me");
+
+            const data = await response.json();
+
+            setUser(data);
+        };
+
+        fetchMyData();
+    }, []);
+
     return (
         <Main>
             <div>
@@ -18,19 +39,21 @@ export default function MyQrCodePage() {
             <MainContent>
                 <ProfileImageContainer>
                     <img
-                        src="https://media.istockphoto.com/id/1399565382/fr/photo/jeune-homme-daffaires-m%C3%A9tis-heureux-les-bras-crois%C3%A9s-travaillant-seul-dans-un-bureau-au.jpg?s=612x612&w=is&k=20&c=qDc547l1rJDlv9ELqYe-VGJEysQiTfwspCdXI_z-EGs="
+                        src={user?.imageUrl || "/img/no-user.png"}
                         alt="QR Code"
                     />
                 </ProfileImageContainer>
                 <ClimberData>
-                    <h3>John Doe</h3>
+                    <h3>{user?.name}</h3>
 
-                    <Tag className="primary">6b</Tag>
+                    <Tag className="primary">
+                        Niveau {user?.climbingLevel.split("l")[1].toUpperCase()}
+                    </Tag>
                 </ClimberData>
 
                 <QRCodeContainer>
                     <QRCode
-                        value="https://climbbro.com/partenar/john-doe"
+                        value={`http://localhost:3000/partner/add/${user?.id}`}
                         bgColor={colors.surface.cream}
                         fgColor={colors.main.primary}
                         level="H"
@@ -45,7 +68,8 @@ export default function MyQrCodePage() {
                 }}
                 onClick={() => {
                     router.push("/partner/scan");
-                }}>
+                }}
+            >
                 <ScanQrCodeIcon size={20} />
                 Ouvrir le scanner
             </Button>

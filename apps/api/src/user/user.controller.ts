@@ -34,4 +34,17 @@ export class UserController {
 
         return updatedUser;
     }
+
+    @UseGuards(AuthGuard)
+    @Get(":id")
+    async getUserById(
+        @Req() request: any,
+        @Res({ passthrough: true }) response: Response,
+    ) {
+        const userId = request.params.id;
+
+        const user = await this.userService.getUserById(userId);
+
+        return user;
+    }
 }

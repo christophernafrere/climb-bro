@@ -39,7 +39,7 @@ export default function page() {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await apiFetch("/user/me");
+                const response = await apiFetch("/user/me", {}, router);
                 console.log("User profile retrieved:", response);
 
                 const data = await response.json();
@@ -149,9 +149,13 @@ export default function page() {
                     </SettingsButton>
                     <SettingsButton
                         onClick={async () => {
-                            await apiFetch("/auth/logout", {
-                                method: "POST",
-                            });
+                            await apiFetch(
+                                "/auth/logout",
+                                {
+                                    method: "POST",
+                                },
+                                router,
+                            );
                             toast.success("Déconnexion réussie !");
                             router.push("/");
                         }}

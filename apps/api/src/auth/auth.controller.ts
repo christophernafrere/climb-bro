@@ -123,12 +123,6 @@ export class AuthController {
     }
 
     @UseGuards(AuthGuard)
-    @Get("profile")
-    async getProfile(@Req() request: any) {
-        return request.user;
-    }
-
-    @UseGuards(AuthGuard)
     @Post("logout")
     async logout(
         @Req() request: any,
