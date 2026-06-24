@@ -71,15 +71,17 @@ export class AuthController {
         response.cookie("access_token", access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: "none",
             maxAge: 15 * 60 * 1000, // 15 minutes
+            domain: process.env.NODE_ENV === "production" ? "climb-bro.christopher-nafrere.fr" : undefined,
         });
 
         response.cookie("refresh_token", refresh_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
+            sameSite: "none",
             maxAge: 30 * 24 * 60 * 60 * 1000, // 7 days
+            domain: process.env.NODE_ENV === "production" ? "climb-bro.christopher-nafrere.fr" : undefined,
         });
 
         return { success: true };
@@ -107,14 +109,16 @@ export class AuthController {
             response.cookie("access_token", access_token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
+                sameSite: "none",
                 maxAge: 15 * 60 * 1000, // 15 minutes
+                domain: process.env.NODE_ENV === "production" ? "climb-bro.christopher-nafrere.fr" : undefined,
             });
             response.cookie("refresh_token", refresh_token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
+                sameSite: "none",
                 maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+                domain: process.env.NODE_ENV === "production" ? "climb-bro.christopher-nafrere.fr" : undefined,
             });
             return { success: true };
         } catch (error) {

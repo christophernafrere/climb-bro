@@ -8,10 +8,10 @@ async function bootstrap() {
     app.use(cookieParser());
 
     app.enableCors({
-        origin: "http://localhost:3000",
+        origin: "https://climb-bro.christopher-nafrere.fr",
         credentials: true,
     });
 
-    await app.listen(process.env.PORT ?? 8000);
+    await app.listen(process.env.PORT ?? 4000);
 }
 bootstrap();
